@@ -18,8 +18,7 @@ class Spellcard(ff.Scene):
 class Bullet(ff.Jammer):
     def __init__(self, x, y, dx, dy): 
         super(Bullet, self).__init__()
-        self.dims(x,y,4,4)
-        self.x-=self.w/2; self.y-=self.h/2
+        self.dims(x,y,4,4,center=True)
         self.push(dx,dy)
         self.add_graphic(self.circlegfx(3, ff.Color(224,224,160)))
         #self.show_hitbox(ff.Color(224,160,128))
@@ -43,8 +42,7 @@ class Bullet(ff.Jammer):
 class Boss(ff.Jammer):
     def __init__(self, x, y): 
         super(Boss, self).__init__()
-        self.dims(x,y,4,4)
-        self.x-=self.w/2; self.y-=self.h/2
+        self.dims(x,y,4,4,center=True)
         self.show_hitbox(ff.Color(224,224,160))
         
         self.angle = math.pi*3/4
@@ -70,8 +68,7 @@ class Boss(ff.Jammer):
 class Player(ff.Jammer):
     def __init__(self, x, y): 
         super(Player, self).__init__()
-        self.dims(x,y,4,4)
-        self.x-=self.w/2; self.y-=self.h/2
+        self.dims(x,y,4,4,center=True)
         self.layer = 32
         self.show_hitbox(ff.Color(32,180,90))
         

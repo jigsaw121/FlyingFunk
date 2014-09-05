@@ -281,8 +281,10 @@ class Jammer(object):
         self.stateinit()
         self.scriptinit()
 
-    def dims(self,x,y,w,h):
+    def dims(self,x,y,w,h,center=False):
         self.x = x; self.y = y; self.w = w; self.h = h
+        if center:
+            self.x-=self.w/2; self.y-=self.h/2
     def push(self,dx,dy):
         self.dx += dx; self.dy += dy
     

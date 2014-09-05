@@ -7,16 +7,22 @@ class Script(object):
     def add(self):
         self.target.add_script(self)
     def remove(self):
-        self.target.remove_script(self)        
+        self.target.remove_script(self)
+    def reset(self):
+        pass
     def update(self):
         #if (len(self.argobj)):
         self.action()
 
 class ScriptDelay(Script):
     def __init__(self, action, delay):
-        self.delay = delay
+        self.origdelay = delay
         super(ScriptDelay, self).__init__(action)
+        self.reset()
         
+    def reset(self):
+        self.delay = self.origdelay
+
     def update(self):
         if self.delay == 0:
             self.action()
@@ -26,13 +32,13 @@ class ScriptDelay(Script):
 
 class ScriptRepeat(ScriptDelay):
     def __init__(self, action, delay):
-        self.origdelay = delay
-        super(ScriptRepeat, self).__init__(action, 0)
-        
+        super(ScriptRepeat, self).__init__(action, delay)
+        self.delay = 0
+
     def update(self):
         if self.delay == 0:
             self.action()
-            self.delay = self.origdelay
+            self.reset()
             return
         self.delay -= 1
 
@@ -90,15 +96,16 @@ class State(object):
 
     def tostate(self, newst):
         if self.state in self.transfrom:
-            self.target.every(self.transfrom[self.state], lambda x: x())
+            self.target.every(self.transfrom[self.state], lambda f: f())
 
         self.state = newst            
 
         if self.state in self.transto:
-            self.target.every(self.transto[self.state], lambda x: x())
+            self.target.every(self.transto[self.state], lambda f: f())
 
     def duringstate(self, st, sc):
         if sc in self.target.scripts:
             self.target.remove_script2(sc)
+        self.onstate(st, sc.reset)
         self.onstate(st, sc.add)
         self.offstate(st, sc.remove)
